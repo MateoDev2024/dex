@@ -4213,8 +4213,7 @@ local function main()
 
 	ScriptViewer.ViewScript = function(scr)
 	    local success, source
-	    local decompilingMessage = "Decompiling..."
-	    codeFrame:SetText(decompilingMessage) 
+	    codeFrame:SetText("--Decompiling...") 
 	    window:Show()
 	    
 	    repeat 
