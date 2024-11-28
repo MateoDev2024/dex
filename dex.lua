@@ -4212,13 +4212,26 @@ local function main()
 	local PreviousScr = nil
 
 	ScriptViewer.ViewScript = function(scr)
-        local success, source
-        repeat 
-            success, source = pcall(env.decompile or function() end, scr)
-        until success
-		if not success or not source then source, PreviousScr = "-- DEX - Source failed to decompile", nil else PreviousScr = scr end
-		codeFrame:SetText(source:gsub("\0", "\\0")) -- Fix stupid breaking script viewer
-		window:Show()
+	    local success, source
+	    local decompilingMessage = "Decompiling..." -- Message to display while decompiling
+	    codeFrame:SetText(decompilingMessage) -- Show the decompiling message
+	    window:Show() -- Make the window visible
+	    
+	    -- Start the decompiling process
+	    repeat 
+	        success, source = pcall(env.decompile or function() end, scr)
+	    until success
+	    
+	    -- If the decompiling fails, set an error message
+	    if not success or not source then 
+	        source = "-- DEX - Source failed to decompile"
+	        PreviousScr = nil
+	    else
+	        PreviousScr = scr
+	    end
+	    
+	    -- Update the script viewer with the result
+	    codeFrame:SetText(source:gsub("\0", "\\0")) -- Fix the script viewer display issue
 	end
 
 	ScriptViewer.Init = function()
